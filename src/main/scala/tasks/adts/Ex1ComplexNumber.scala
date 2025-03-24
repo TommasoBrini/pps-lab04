@@ -30,4 +30,9 @@ object Ex1ComplexNumbers:
       def im(): Double = c.im
       def sum(other: Complex): Complex = complex(c.re + other.re, c.im + other.im)
       def subtract(other: Complex): Complex = complex(c.re - other.re, c.im - other.im)
-      def asString(): String = ???
+      def asString(): String = c match
+        case ComplexImpl(0, 0) => "0.0"
+        case ComplexImpl(_, 0) => c.re.toString
+        case ComplexImpl(0, _) => c.im + "i"
+        case ComplexImpl(_, _) if c.im < 0 => c.re + " - " + c.im.abs + "i"
+        case _ => c.re + " + " + c.im + "i"
