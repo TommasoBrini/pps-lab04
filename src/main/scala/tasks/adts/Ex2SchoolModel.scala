@@ -1,7 +1,7 @@
 package tasks.adts
 import u03.extensionmethods.Optionals.*
 import u03.extensionmethods.Sequences.*
-import Sequence.Nil
+import Sequence.{Cons, Nil}
 
 /*  Exercise 2: 
  *  Implement the below trait, and write a meaningful test.
@@ -127,10 +127,14 @@ object SchoolModel:
     extension (school: School)
       def courses: Sequence[String] = school.courses
       def teachers: Sequence[String] = school.teachers
-      def setTeacherToCourse(teacher: Teacher, course: Course): School = ???
-      def coursesOfATeacher(teacher: Teacher): Sequence[Course] = ???
-      def hasTeacher(name: String): Boolean = ???
-      def hasCourse(name: String): Boolean = ???
+      def setTeacherToCourse(teacher: Teacher, course: Course): School =
+        SchoolImpl(school.teachers.concat(Cons(teacher, Nil())),
+          school.courses.concat(Cons(course, Nil())),
+          school.teacherToCourses.concat(Cons(TeachersToCourse(teacher,course), Nil())))
+      def coursesOfATeacher(teacher: Teacher): Sequence[Course] =
+        school.teacherToCourses.filter(t => t.teacher == teacher).map(t => t.course)
+      def hasTeacher(name: String): Boolean = school.teachers.contains(name)
+      def hasCourse(name: String): Boolean = school.courses.contains(name)
 
 @main def examples(): Unit =
   import SchoolModel.BasicSchoolModule.*
